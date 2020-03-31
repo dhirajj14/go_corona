@@ -6,16 +6,40 @@ import 'dart:convert';
 void main() async{
 
   var data = await getTotalData();
-  print("Confirmed: "+data[0]['confirmed']);
-  print("Recovered: "+data[0]['recovered']);
-  print("Critical: "+data[0]['critical'] );
-  print("Deaths: "+data[0]['deaths'] );
 
   runApp(new MaterialApp(
     home: new Scaffold(
       appBar: new AppBar(
         title: new Text("Go Corona"),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.red,
+      ),
+
+      body: new Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            ListTile(
+              leading: Icon(Icons.filter_vintage),
+              title: new Text("Active"),
+              subtitle: new Text(data[0]['confirmed']),
+            ),
+            ListTile(
+              leading: Icon(Icons.accessibility_new),
+              title: new Text("Recovered"),
+              subtitle: new Text(data[0]['recovered']),
+            ),
+            ListTile(
+              leading: Icon(Icons.access_time),
+              title: new Text("Critical"),
+              subtitle: new Text(data[0]['critical']),
+            ),
+            ListTile(
+              leading: Icon(Icons.airline_seat_flat),
+              title: new Text("Deaths"),
+              subtitle: new Text(data[0]['deaths']),
+            ),
+          ],
+        ),
       ),
     ),
   ));
