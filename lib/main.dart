@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
+import 'custom_icons.dart' as CustomIcons;
 
 void main() => runApp(TotalWidget());
 
@@ -13,7 +14,7 @@ class TotalWidget extends StatefulWidget {
 
 class _TotalWidgetState extends State<TotalWidget> {
 
-  int _currentIndex = 0;
+  int _currentIndex = 1;
 
   var data;
 
@@ -41,7 +42,19 @@ class _TotalWidgetState extends State<TotalWidget> {
               title: new Text("Go Corona"),
               backgroundColor: Colors.red[800],
             ),
-             body: new Text("Loading Data"),
+             body: Row(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: <Widget>[
+                 Column(
+                   mainAxisAlignment: MainAxisAlignment.center,
+                   children: <Widget>[
+                     new Image.asset('assets/images/coronavirus.png',
+                     height: 200.0,
+                     width: 200.0,),
+                   ],
+                 ),
+               ],
+             )
           ),
     );
 
@@ -54,69 +67,34 @@ class _TotalWidgetState extends State<TotalWidget> {
             backgroundColor: Colors.red[800],
           ),
 
-          body:
-            SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    child: new Card(
-                      child: RefreshIndicator(
-                        key: new GlobalKey<RefreshIndicatorState>(),
-                        onRefresh: () async {
-                          setTotal();
-                        },
-                          child: ListView(
+          body: Container(
+                        child: RefreshIndicator(
+                          key: new GlobalKey<RefreshIndicatorState>(),
+                          onRefresh: () async {
+                            setTotal();
+                          },
+                          child: GridView.count(
                             shrinkWrap: true,
+                            crossAxisCount: 2,
+                            padding: EdgeInsets.all(3.0),
                             children: <Widget>[
-                              ListTile(
-                                leading: Icon(Icons.filter_vintage),
-                                title: new Text("Active"),
-                                subtitle: new Text(data[0]['confirmed']),
-                              ),
-                              ListTile(
-                                leading: Icon(Icons.accessibility_new),
-                                title: new Text("Recovered"),
-                                subtitle: new Text(data[0]['recovered']),
-                              ),
-                              ListTile(
-                                leading: Icon(Icons.access_time),
-                                title: new Text("Critical"),
-                                subtitle: new Text(data[0]['critical']),
-                              ),
-                              ListTile(
-                                leading: Icon(Icons.airline_seat_flat),
-                                title: new Text("Deaths"),
-                                subtitle: new Text(data[0]['deaths']),
-                              ),
+                              makeDashboardItem(data[0]['confirmed'], Icons.book),
+                              makeDashboardItem(data[0]['recovered'], Icons.alarm),
+                              makeDashboardItem(data[0]['critical'], Icons.alarm),
+                              makeDashboardItem(data[0]['deaths'], Icons.alarm),
                             ],
                           ),
-                        ),
-                      ),
-                  ),
-
-                  new Container(
-                    height: 80.0,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: SearchBar(),
-                    ),
-                  )
-                ],
               ),
             ),
           bottomNavigationBar: BottomNavigationBar(
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                title: Text('Home'),
+                icon: Icon(CustomIcons.CustomIcons.earth),
+                title: Text('Gobal'),
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.business),
-                title: Text('Business'),
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.school),
-                title: Text('School'),
+                icon: Icon(Icons.flag),
+                title: Text('Country'),
               ),
             ],
             currentIndex: _currentIndex,
@@ -155,6 +133,38 @@ class APIService {
       throw Exception('Failed to load json data');
     }
   }
+}
+
+Card makeDashboardItem(String title, IconData icon) {
+  return Card(
+      elevation: 1.0,
+      margin: new EdgeInsets.all(8.0),
+      child: Container(
+        decoration: BoxDecoration(color: Color.fromRGBO(220, 220, 220, 1.0)),
+        child: new InkWell(
+          onTap: () {},
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisSize: MainAxisSize.min,
+            verticalDirection: VerticalDirection.down,
+            children: <Widget>[
+              SizedBox(height: 50.0),
+              Center(
+                  child: Icon(
+                    icon,
+                    size: 40.0,
+                    color: Colors.black,
+                  )),
+              SizedBox(height: 20.0),
+              new Center(
+                child: new Text(title,
+                    style:
+                    new TextStyle(fontSize: 18.0, color: Colors.black)),
+              )
+            ],
+          ),
+        ),
+      ));
 }
 
 getTotalData() {
