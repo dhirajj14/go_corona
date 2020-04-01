@@ -48,6 +48,7 @@ class _TotalWidgetState extends State<TotalWidget> {
     }else{
       return new MaterialApp(
         home: new Scaffold(
+          backgroundColor: Colors.white,
           appBar: new AppBar(
             title: new Text("Go Corona"),
             backgroundColor: Colors.red[800],
