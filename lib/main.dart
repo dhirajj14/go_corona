@@ -1,3 +1,4 @@
+import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -12,8 +13,15 @@ class TotalWidget extends StatefulWidget {
 
 class _TotalWidgetState extends State<TotalWidget> {
 
+  int _currentIndex = 0;
 
   var data;
+
+  void onTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   void setTotal() async{
     data = await getTotalData();
@@ -28,9 +36,10 @@ class _TotalWidgetState extends State<TotalWidget> {
       setTotal();
       return new MaterialApp(
           home: new Scaffold(
+
             appBar: new AppBar(
               title: new Text("Go Corona"),
-              backgroundColor: Colors.red,
+              backgroundColor: Colors.red[800],
             ),
              body: new Text("Loading Data"),
           ),
@@ -41,41 +50,77 @@ class _TotalWidgetState extends State<TotalWidget> {
         home: new Scaffold(
           appBar: new AppBar(
             title: new Text("Go Corona"),
-            backgroundColor: Colors.red,
+            backgroundColor: Colors.red[800],
           ),
 
           body:
-          RefreshIndicator(
-            onRefresh: () async {
-              setTotal();
-            },
-            child: new Card(
-              child: ListView(
-                shrinkWrap: true,
+            SingleChildScrollView(
+              child: Column(
                 children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.filter_vintage),
-                    title: new Text("Active"),
-                    subtitle: new Text(data[0]['confirmed']),
+                  Container(
+                    child: new Card(
+                      child: RefreshIndicator(
+                        key: new GlobalKey<RefreshIndicatorState>(),
+                        onRefresh: () async {
+                          setTotal();
+                        },
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: <Widget>[
+                              ListTile(
+                                leading: Icon(Icons.filter_vintage),
+                                title: new Text("Active"),
+                                subtitle: new Text(data[0]['confirmed']),
+                              ),
+                              ListTile(
+                                leading: Icon(Icons.accessibility_new),
+                                title: new Text("Recovered"),
+                                subtitle: new Text(data[0]['recovered']),
+                              ),
+                              ListTile(
+                                leading: Icon(Icons.access_time),
+                                title: new Text("Critical"),
+                                subtitle: new Text(data[0]['critical']),
+                              ),
+                              ListTile(
+                                leading: Icon(Icons.airline_seat_flat),
+                                title: new Text("Deaths"),
+                                subtitle: new Text(data[0]['deaths']),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                   ),
-                  ListTile(
-                    leading: Icon(Icons.accessibility_new),
-                    title: new Text("Recovered"),
-                    subtitle: new Text(data[0]['recovered']),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.access_time),
-                    title: new Text("Critical"),
-                    subtitle: new Text(data[0]['critical']),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.airline_seat_flat),
-                    title: new Text("Deaths"),
-                    subtitle: new Text(data[0]['deaths']),
-                  ),
+
+                  new Container(
+                    height: 80.0,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: SearchBar(),
+                    ),
+                  )
                 ],
               ),
             ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                title: Text('Home'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.business),
+                title: Text('Business'),
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.school),
+                title: Text('School'),
+              ),
+            ],
+            currentIndex: _currentIndex,
+            selectedItemColor: Colors.red[800],
+            onTap: onTabTapped,
           ),
         ),
       );
