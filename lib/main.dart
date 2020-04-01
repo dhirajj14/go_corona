@@ -3,46 +3,84 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 
-void main() async{
+void main() => runApp(TotalWidget());
 
-  var data = await getTotalData();
+class TotalWidget extends StatefulWidget {
+  @override
+  _TotalWidgetState createState() => _TotalWidgetState();
+}
 
-  runApp(new MaterialApp(
-    home: new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Go Corona"),
-        backgroundColor: Colors.red,
-      ),
+class _TotalWidgetState extends State<TotalWidget> {
 
-      body: new Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.filter_vintage),
-              title: new Text("Active"),
-              subtitle: new Text(data[0]['confirmed']),
+
+  var data;
+
+  void setTotal() async{
+    data = await getTotalData();
+    setState(() {
+    });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    if(data == null){
+      setTotal();
+      return new MaterialApp(
+          home: new Scaffold(
+            appBar: new AppBar(
+              title: new Text("Go Corona"),
+              backgroundColor: Colors.red,
             ),
-            ListTile(
-              leading: Icon(Icons.accessibility_new),
-              title: new Text("Recovered"),
-              subtitle: new Text(data[0]['recovered']),
+             body: new Text("Loading Data"),
+          ),
+    );
+
+    }else{
+      return new MaterialApp(
+        home: new Scaffold(
+          appBar: new AppBar(
+            title: new Text("Go Corona"),
+            backgroundColor: Colors.red,
+          ),
+
+          body:
+          RefreshIndicator(
+            onRefresh: () async {
+              setTotal();
+            },
+            child: new Card(
+              child: ListView(
+                shrinkWrap: true,
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.filter_vintage),
+                    title: new Text("Active"),
+                    subtitle: new Text(data[0]['confirmed']),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.accessibility_new),
+                    title: new Text("Recovered"),
+                    subtitle: new Text(data[0]['recovered']),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.access_time),
+                    title: new Text("Critical"),
+                    subtitle: new Text(data[0]['critical']),
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.airline_seat_flat),
+                    title: new Text("Deaths"),
+                    subtitle: new Text(data[0]['deaths']),
+                  ),
+                ],
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.access_time),
-              title: new Text("Critical"),
-              subtitle: new Text(data[0]['critical']),
-            ),
-            ListTile(
-              leading: Icon(Icons.airline_seat_flat),
-              title: new Text("Deaths"),
-              subtitle: new Text(data[0]['deaths']),
-            ),
-          ],
+          ),
         ),
-      ),
-    ),
-  ));
+      );
+    }
+  }
 }
 
 class APIService {
@@ -78,8 +116,6 @@ getTotalData() {
   Future data = apiService.get(endpoint:'/totals');
   return data;
 }
-
-
 
 
 
