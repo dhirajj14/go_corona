@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'custom_icons.dart' as CustomIcons;
 import 'countries.dart';
 import 'world.dart';
-
+import 'package:flutter/services.dart';
 void main() => runApp(TotalWidget());
 
 class TotalWidget extends StatefulWidget {
@@ -27,6 +27,10 @@ class _TotalWidgetState extends State<TotalWidget> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return new MaterialApp(
         home: new Scaffold(
           backgroundColor: Colors.white,
