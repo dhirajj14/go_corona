@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:iso_countries/iso_countries.dart';
+import 'country_data.dart';
 
 class Post {
   final String title;
@@ -52,6 +53,7 @@ class CountriesWidgetState extends State<CountriesWidget> {
         .toList();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,6 +69,12 @@ class CountriesWidgetState extends State<CountriesWidget> {
                 return ListTile(
                   title: Text(country.name),
                   subtitle: Text(country.countryCode),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CountryDataWidget(country.countryCode)),
+                    );
+                  }
                 );
               },
                 itemCount: mainDataList != null ? mainDataList.length : 0,
@@ -76,7 +84,12 @@ class CountriesWidgetState extends State<CountriesWidget> {
               return ListTile(
                 title: Text(val.name),
                 subtitle: Text(val.countryCode),
-                onTap: ()=> print("Dhiraj"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CountryDataWidget(val.countryCode)),
+                    );
+                  }
               );
             },
           ),

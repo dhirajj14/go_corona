@@ -27,7 +27,7 @@ class _TotalWidgetState extends State<TotalWidget> {
 
   @override
   Widget build(BuildContext context) {
-         return new MaterialApp(
+    return new MaterialApp(
         home: new Scaffold(
           backgroundColor: Colors.white,
           appBar: new AppBar(
@@ -40,7 +40,7 @@ class _TotalWidgetState extends State<TotalWidget> {
             items: const <BottomNavigationBarItem>[
               BottomNavigationBarItem(
                 icon: Icon(CustomIcons.CustomIcons.earth),
-                title: Text('Gobal'),
+                title: Text('World'),
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.flag),
