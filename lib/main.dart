@@ -14,7 +14,7 @@ class _TotalWidgetState extends State<TotalWidget> {
 
   List<Widget> _children = [
     WorldWidget(),
-    CountriesWidget(Colors.white),
+    CountriesWidget(),
   ];
   int _currentIndex = 0;
 
