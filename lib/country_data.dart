@@ -15,7 +15,7 @@ class CountryDataWidget extends StatefulWidget {
 }
 
 class CountryDataWidgetState extends State<CountryDataWidget> {
-
+  Timer timer;
   var data;
   final String code;
   CountryDataWidgetState(this.code);
@@ -26,10 +26,14 @@ class CountryDataWidgetState extends State<CountryDataWidget> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     if(data == null){
-      setTotal();
+      timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        setTotal();
+      });
+
       return new Scaffold(
         backgroundColor: Colors.white,
         appBar: new AppBar(
@@ -42,15 +46,17 @@ class CountryDataWidgetState extends State<CountryDataWidget> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Image.asset('assets/images/coronavirus.png',
+              new Image.asset('assets/images/Coronavirus-illustration.gif',
                 height: 200.0,
                 width: 200.0,),
+              new Text("Loading...")
             ],
           ),
         ],
       ),
       );
     }else{
+      timer?.cancel();
       return new Scaffold(
           backgroundColor: Colors.white,
           appBar: new AppBar(

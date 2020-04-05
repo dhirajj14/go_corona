@@ -14,6 +14,7 @@ class WorldWidget extends StatefulWidget {
 
 class WorldWidgetState extends State<WorldWidget> {
 
+  Timer timer;
   var data;
   WorldWidgetState();
 
@@ -23,24 +24,29 @@ class WorldWidgetState extends State<WorldWidget> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
     if(data == null){
-      setTotal();
+      timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        setTotal();
+      });
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              new Image.asset('assets/images/coronavirus.png',
+              new Image.asset('assets/images/Coronavirus-illustration.gif',
                 height: 200.0,
                 width: 200.0,),
+              new Text("Loading...")
             ],
           ),
         ],
       );
     }else{
+      timer?.cancel();
       return Column(
         children: <Widget>[
           new Container(
