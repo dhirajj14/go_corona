@@ -158,7 +158,6 @@ Card makeDashboardItem(String title, String name) {
 
 getTotalData(String code) {
   APIService apiService = APIService();
-  print("Dhirajk");
   Future data = apiService.get(endpoint:'/country/code', query:{"format": "undefined", "code" : code});
   return data;
 }
